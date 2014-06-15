@@ -37,7 +37,7 @@ class AbstractDaemonApplicationTest extends \PHPUnit_Framework_TestCase
 	 */
 	public static function tearDownAfterClass()
 	{
-		$pidPath = JPATH_ROOT . '/japplicationdaemontest.pid';
+		$pidPath = __DIR__ . '/japplicationdaemontest.pid';
 
 		if (file_exists($pidPath))
 		{
@@ -214,7 +214,7 @@ class AbstractDaemonApplicationTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testWriteProcessIdFile()
 	{
-		$pidPath = JPATH_ROOT . '/japplicationdaemontest.pid';
+		$pidPath = __DIR__ . '/japplicationdaemontest.pid';
 
 		if (file_exists($pidPath))
 		{
@@ -245,6 +245,21 @@ class AbstractDaemonApplicationTest extends \PHPUnit_Framework_TestCase
 			substr(decoct(fileperms($this->inspector->getClassProperty('config')->get('application_pid_file'))), 1),
 			'Line: ' . __LINE__
 		);
+
+		// Tests Invalid cases
+
+		// Invalid process id.
+		$this->inspector->setClassProperty('processId', 0);
+		$this->assertFalse($this->inspector->writeProcessIdFile());
+
+		// No filename
+		$this->inspector->setClassProperty('processId', $pid);
+		$this->inspector->set('application_pid_file', null);
+		$this->assertFalse($this->inspector->writeProcessIdFile());
+
+		// Invalid filename/path
+		$this->inspector->set('application_pid_file', '/foo/bar');
+		$this->assertFalse($this->inspector->writeProcessIdFile());
 	}
 
 	/**

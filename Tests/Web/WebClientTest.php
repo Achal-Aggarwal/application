@@ -6,6 +6,8 @@
 
 require_once __DIR__ . '/Stubs/JWebClientInspector.php';
 
+use Joomla\Test\TestHelper;
+
 /**
  * Test class for Joomla\Application\Web\WebClient.
  *
@@ -65,6 +67,10 @@ class JApplicationWebClientTest extends PHPUnit_Framework_TestCase
 				'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/534.30 (KHTML, like Gecko) Ubuntu/10.04 Chromium/12.0.742.112 Chrome/12.0.742.112 Safari/534.30'),
 			array(Joomla\Application\Web\WebClient::WINDOWS, false, Joomla\Application\Web\WebClient::WEBKIT, Joomla\Application\Web\WebClient::CHROME, '15.0.864.0',
 				'Mozilla/5.0 (Windows NT 5.1) AppleWebKit/535.2 (KHTML, like Gecko) Chrome/15.0.864.0 Safari/535.2'),
+			array(Joomla\Application\Web\WebClient::WINDOWS_PHONE, true, Joomla\Application\Web\WebClient::TRIDENT, Joomla\Application\Web\WebClient::IE, '9.0',
+				'Mozilla/5.0 (compatible; MSIE 9.0; Windows Phone OS 7.5; Trident/5.0; IEMobile/9.0)'),
+			array(Joomla\Application\Web\WebClient::WINDOWS_CE, true, Joomla\Application\Web\WebClient::TRIDENT, Joomla\Application\Web\WebClient::IE, '6.0',
+				'HTC_Touch_3G Mozilla/4.0 (compatible; MSIE 6.0; Windows CE; IEMobile 7.11)'),
 			array(Joomla\Application\Web\WebClient::BLACKBERRY, true, Joomla\Application\Web\WebClient::WEBKIT, Joomla\Application\Web\WebClient::SAFARI, '6.0.0.546',
 				'Mozilla/5.0 (BlackBerry; U; BlackBerry 9700; pt) AppleWebKit/534.8+ (KHTML, like Gecko) Version/6.0.0.546 Mobile Safari/534.8+'),
 			array(Joomla\Application\Web\WebClient::BLACKBERRY, true, Joomla\Application\Web\WebClient::WEBKIT, '', '',
@@ -205,7 +211,49 @@ class JApplicationWebClientTest extends PHPUnit_Framework_TestCase
 	 */
 	public function test__construct()
 	{
-		$this->markTestIncomplete();
+		
+		$_SERVER['HTTP_ACCEPT_ENCODING'] = 'gzip,deflate';
+		$_SERVER['HTTP_ACCEPT_LANGUAGE'] = 'en-US,en;q=0.9';
+
+		// Default Constructor call
+		$instance = new JWebClientInspector;
+
+		$this->assertEquals(
+			$_SERVER['HTTP_USER_AGENT'],
+			TestHelper::getValue($instance, 'userAgent')
+		);
+
+		$this->assertEquals(
+			$_SERVER['HTTP_ACCEPT_ENCODING'],
+			TestHelper::getValue($instance, 'acceptEncoding')
+		);
+
+		$this->assertEquals(
+			$_SERVER['HTTP_ACCEPT_LANGUAGE'],
+			TestHelper::getValue($instance, 'acceptLanguage')
+		);
+
+		// Parameterized Constructor call
+		$instance = new JWebClientInspector(
+			$_SERVER['HTTP_USER_AGENT'],
+			$_SERVER['HTTP_ACCEPT_ENCODING'],
+			$_SERVER['HTTP_ACCEPT_LANGUAGE']
+		);
+
+		$this->assertEquals(
+			$_SERVER['HTTP_USER_AGENT'],
+			TestHelper::getValue($instance, 'userAgent')
+		);
+
+		$this->assertEquals(
+			$_SERVER['HTTP_ACCEPT_ENCODING'],
+			TestHelper::getValue($instance, 'acceptEncoding')
+		);
+
+		$this->assertEquals(
+			$_SERVER['HTTP_ACCEPT_LANGUAGE'],
+			TestHelper::getValue($instance, 'acceptLanguage')
+		);
 	}
 
 	/**
@@ -217,7 +265,45 @@ class JApplicationWebClientTest extends PHPUnit_Framework_TestCase
 	 */
 	public function test__get()
 	{
-		$this->markTestIncomplete();
+		$ua = 'Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; WOW64; Trident/6.0)';
+		$instance = new JWebClientInspector($ua);
+
+		$this->assertEquals(
+			$ua,
+			$instance->userAgent
+		);
+		$this->assertEquals(
+			false,
+			$instance->mobile
+		);
+		$this->assertEquals(
+			Joomla\Application\Web\WebClient::WINDOWS,
+			$instance->platform
+		);
+		$this->assertEquals(
+			Joomla\Application\Web\WebClient::TRIDENT,
+			$instance->engine
+		);
+		$this->assertEquals(
+			Joomla\Application\Web\WebClient::IE,
+			$instance->browser
+		);
+		$this->assertEquals(
+			10,
+			$instance->browserVersion
+		);
+		$this->assertEquals(
+			array(''),
+			$instance->languages
+		);
+		$this->assertEquals(
+			array(''),
+			$instance->encodings
+		);
+		$this->assertEquals(
+			'',
+			$instance->robot
+		);
 	}
 
 	/**

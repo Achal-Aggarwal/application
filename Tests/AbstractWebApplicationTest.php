@@ -1117,7 +1117,47 @@ class AbstractWebApplicationTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testRespond()
 	{
-		$this->markTestIncomplete();
+		$this->instance->mimeType = 'text/html';
+		$this->instance->charSet = 'text/html';
+
+		TestHelper::invoke($this->instance, 'respond');
+
+		$headers  = TestHelper::getValue($this->instance, 'headers');
+
+		$this->assertTrue(
+			in_array(
+				array('Content-Type: text/html; charset=text/html',true,null),
+				$headers
+			)
+		);
+
+		$this->assertTrue(
+			in_array(
+				array('Expires: Mon, 1 Jan 2001 00:00:00 GMT',true,null),
+				$headers
+			)
+		);
+
+		$this->assertTrue(
+			in_array(
+				array('Expires: Mon, 1 Jan 2001 00:00:00 GMT',true,null),
+				$headers
+			)
+		);
+
+		$this->assertTrue(
+			in_array(
+				array('Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0',true,null),
+				$headers
+			)
+		);
+
+		$this->assertTrue(
+			in_array(
+				array('Pragma: no-cache',true,null),
+				$headers
+			)
+		);
 	}
 
 	/**

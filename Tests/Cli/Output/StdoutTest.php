@@ -79,13 +79,11 @@ class StdoutTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function test__constructProcessorInjection()
 	{
-		$this->markTestSkipped('Locally this test is failing, the processor is not being passed it seems.');
-
 		$object = new Stdout(new TestProcessor);
 
 		$this->assertInstanceOf(
 			'\\Joomla\\Application\\Tests\\Cli\\Output\\Processor\\TestProcessor',
-			$this->object->getProcessor()
+			$object->getProcessor()
 		);
 	}
 }

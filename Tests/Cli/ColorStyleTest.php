@@ -64,7 +64,7 @@ class ColorStyleTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return void
 	 */
-	public function fromString()
+	public function testfromString()
 	{
 		$style = new ColorStyle('white', 'red', array('blink', 'bold'));
 

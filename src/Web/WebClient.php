@@ -279,7 +279,7 @@ class WebClient
 			$matches = array();
 
 			if (preg_match_all($pattern, $userAgent, $matches))
-			{
+			{	
 				// Do we have both a Version and browser match?
 				if (count($matches['browser']) == 2)
 				{

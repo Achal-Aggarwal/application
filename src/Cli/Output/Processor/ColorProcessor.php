@@ -104,7 +104,7 @@ class ColorProcessor implements ProcessorInterface
 	{
 		preg_match_all($this->tagFilter, $string, $matches);
 
-		if (!$matches)
+		if (count($matches[0]) == 0)
 		{
 			return $string;
 		}

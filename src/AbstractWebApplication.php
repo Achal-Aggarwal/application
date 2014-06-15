@@ -713,10 +713,10 @@ abstract class AbstractWebApplication extends AbstractApplication
 		$path = rtrim($uri->toString(array('path')), '/\\');
 
 		// Check if the path includes "index.php".
-		if (strpos($path, 'index.php') !== false)
+		if (($indexPos = strpos($path, 'index.php')) !== false)
 		{
 			// Remove the index.php portion of the path.
-			$path = substr_replace($path, '', strpos($path, 'index.php'), 9);
+			$path = substr_replace($path, '', $indexPos, 9);
 			$path = rtrim($path, '/\\');
 		}
 

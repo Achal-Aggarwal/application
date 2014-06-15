@@ -86,6 +86,11 @@ class ColorProcessorTest extends \PHPUnit_Framework_TestCase
 			$this->object->process('<fg=red>foo</fg=red>'),
 			$this->equalTo('[31mfoo[0m')
 		);
+
+		$this->assertThat(
+			$this->object->process('foobar'),
+			$this->equalTo('foobar')
+		);
 	}
 
 	/**
